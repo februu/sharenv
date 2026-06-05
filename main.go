@@ -1,0 +1,65 @@
+package main
+
+import (
+	"os"
+
+	"github.com/februu/sharenv/internal/commands"
+
+	"github.com/spf13/cobra"
+)
+
+var rootCmd = &cobra.Command{
+	Use:   "sharenv",
+	Short: "A minimal .env file manager built for sharing environment variables across users and machines.",
+	Long:  `Sharenv is a minimal .env file manager built for sharing environment variables across users and machines. It provides a simple CLI interface to manage and share environment variables, making it easier to maintain consistent configurations across different environments.`,
+	Run:   commands.RunRootCmd,
+}
+
+var initCmd = &cobra.Command{
+	Use:   "init",
+	Short: "Initialize a new .sharenv file and key in the current directory",
+	Run:   commands.RunInitCmd,
+}
+
+var saveCmd = &cobra.Command{
+	Use:   "save",
+	Short: "Track current .env file",
+	Run:   commands.RunSaveCmd,
+}
+
+var removeCmd = &cobra.Command{
+	Use:   "remove",
+	Short: "Remove specified environment file from tracking",
+	Run:   commands.RunRemoveCmd,
+}
+
+var useCmd = &cobra.Command{
+	Use:   "use",
+	Short: "Use an environment file that is being tracked",
+	Run:   commands.RunUseCmd,
+}
+
+var listCmd = &cobra.Command{
+	Use:   "list",
+	Short: "List all tracked .env files",
+	Run:   commands.RunListCmd,
+}
+
+var shareCmd = &cobra.Command{
+	Use:   "share",
+	Short: "Display a key that can be shared with others to use tracked .env files",
+	Run:   commands.RunShareCmd,
+}
+
+func main() {
+	rootCmd.AddCommand(initCmd)
+	rootCmd.AddCommand(saveCmd)
+	rootCmd.AddCommand(removeCmd)
+	rootCmd.AddCommand(useCmd)
+	rootCmd.AddCommand(listCmd)
+	rootCmd.AddCommand(shareCmd)
+
+	if err := rootCmd.Execute(); err != nil {
+		os.Exit(1)
+	}
+}
