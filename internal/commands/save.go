@@ -2,51 +2,50 @@ package commands
 
 import (
 	"encoding/base64"
-	"fmt"
 	"os"
 
 	"github.com/februu/sharenv/internal/file"
 	"github.com/februu/sharenv/internal/models"
+	"github.com/februu/sharenv/internal/ui"
 	"github.com/spf13/cobra"
 )
 
 func RunSaveCmd(cmd *cobra.Command, args []string) {
 	envs, err := file.ReadLockFile()
 	if err != nil {
-		fmt.Println("Error reading lock file:", err)
+		ui.Error("Could not read lock file: %v", err)
 		return
 	}
 	_, exists := envs[args[0]]
 
 	key, err := file.LoadKey(".sharenv.key")
 	if err != nil {
-		fmt.Println("Error loading key:", err)
+		ui.Error("Could not load key file: %v", err)
 		return
 	}
 
 	env, err := os.ReadFile(".env")
 	if err != nil {
-		fmt.Println("Error loading .env file:", err)
+		ui.Error("Could not read .env file: %v", err)
 		return
 	}
 
 	encrypted, err := file.Encrypt(env, key)
 	if err != nil {
-		fmt.Println("Error encrypting value:", err)
+		ui.Error("Encryption failed: %v", err)
 		return
 	}
 
-	encryptedStr := base64.StdEncoding.EncodeToString(encrypted)
-	envs[args[0]] = models.Entry{Encrypted: encryptedStr}
+	envs[args[0]] = models.Entry{Encrypted: base64.StdEncoding.EncodeToString(encrypted)}
 
 	if err := file.WriteLockFile(envs); err != nil {
-		fmt.Println("Error writing lock file:", err)
+		ui.Error("Could not write lock file: %v", err)
 		return
 	}
 
 	if exists {
-		fmt.Printf("Environment '%s' updated successfully.\n", args[0])
+		ui.Success("Environment '%s' updated.", args[0])
 		return
 	}
-	fmt.Printf("Environment '%s' saved successfully.\n", args[0])
+	ui.Success("Environment '%s' saved.", args[0])
 }

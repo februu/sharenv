@@ -4,19 +4,25 @@ import (
 	"fmt"
 
 	"github.com/februu/sharenv/internal/file"
+	"github.com/februu/sharenv/internal/ui"
 	"github.com/spf13/cobra"
 )
 
 func RunListCmd(cmd *cobra.Command, args []string) {
-
 	envs, err := file.ReadLockFile()
 	if err != nil {
-		fmt.Println("Error reading lock file:", err)
+		ui.Error("Could not read lock file: %v", err)
 		return
 	}
-	fmt.Println("Available environments:")
-	for key := range envs {
-		fmt.Printf("%s\n", key)
+
+	if len(envs) == 0 {
+		ui.Info("No environments saved yet. Use 'sharenv save <name>' to add one.")
+		return
 	}
 
+	ui.Header(fmt.Sprintf("Tracked environments (%d)", len(envs)))
+	for name := range envs {
+		ui.ListItem(name)
+	}
+	fmt.Println()
 }

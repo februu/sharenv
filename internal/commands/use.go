@@ -2,48 +2,48 @@ package commands
 
 import (
 	"encoding/base64"
-	"fmt"
 	"os"
 
 	"github.com/februu/sharenv/internal/file"
+	"github.com/februu/sharenv/internal/ui"
 	"github.com/spf13/cobra"
 )
 
 func RunUseCmd(cmd *cobra.Command, args []string) {
 	envs, err := file.ReadLockFile()
 	if err != nil {
-		fmt.Println("Error reading lock file:", err)
+		ui.Error("Could not read lock file: %v", err)
 		return
 	}
 
 	entry, exists := envs[args[0]]
 	if !exists {
-		fmt.Printf("Environment '%s' not found.\n", args[0])
+		ui.Error("Environment '%s' not found. Run 'sharenv list' to see available environments.", args[0])
 		return
 	}
 
 	key, err := file.LoadKey(".sharenv.key")
 	if err != nil {
-		fmt.Println("Error loading key:", err)
+		ui.Error("Could not load key file: %v", err)
 		return
 	}
 
 	ciphertext, err := base64.StdEncoding.DecodeString(entry.Encrypted)
 	if err != nil {
-		fmt.Println("Error decoding entry:", err)
+		ui.Error("Could not decode entry: %v", err)
 		return
 	}
 
 	decrypted, err := file.Decrypt(ciphertext, key)
 	if err != nil {
-		fmt.Println("Error decrypting entry:", err)
+		ui.Error("Decryption failed — make sure you are using the correct key: %v", err)
 		return
 	}
 
 	if err := os.WriteFile(".env", decrypted, 0600); err != nil {
-		fmt.Println("Error writing .env file:", err)
+		ui.Error("Could not write .env file: %v", err)
 		return
 	}
 
-	fmt.Printf("Environment '%s' loaded into .env.\n", args[0])
+	ui.Success("Environment '%s' loaded into .env.", args[0])
 }

@@ -1,20 +1,19 @@
 package commands
 
 import (
-	"fmt"
 	"os"
 
+	"github.com/februu/sharenv/internal/ui"
 	"github.com/spf13/cobra"
 )
 
 func RunShareCmd(cmd *cobra.Command, args []string) {
-
-	// Load the key
 	key, err := os.ReadFile(".sharenv.key")
 	if err != nil {
-		fmt.Println("Error loading key:", err)
+		ui.Error("Could not load key file: %v", err)
 		return
 	}
 
-	fmt.Printf("Secret Key (.sharenv.key):\n\n%s\n\nRemember to keep this key secure! You can always regenerate it with 'sharenv init'.", key)
+	ui.KeyDisplay("Secret key (.sharenv.key):", string(key))
+	ui.Warn("Keep this key secure — anyone with it can decrypt your environments.")
 }
