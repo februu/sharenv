@@ -51,6 +51,19 @@ var shareCmd = &cobra.Command{
 	Run:   commands.RunShareCmd,
 }
 
+var renameCmd = &cobra.Command{
+	Use:   "rename <old> <new>",
+	Short: "Rename a tracked environment",
+	Args:  cobra.ExactArgs(2),
+	Run:   commands.RunRenameCmd,
+}
+
+var rekeyCmd = &cobra.Command{
+	Use:   "rekey",
+	Short: "Generate a new key and re-encrypt all tracked environments",
+	Run:   commands.RunRekeyCmd,
+}
+
 func main() {
 	rootCmd.AddCommand(initCmd)
 	rootCmd.AddCommand(saveCmd)
@@ -58,6 +71,8 @@ func main() {
 	rootCmd.AddCommand(useCmd)
 	rootCmd.AddCommand(listCmd)
 	rootCmd.AddCommand(shareCmd)
+	rootCmd.AddCommand(renameCmd)
+	rootCmd.AddCommand(rekeyCmd)
 
 	if err := rootCmd.Execute(); err != nil {
 		os.Exit(1)
