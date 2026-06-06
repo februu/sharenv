@@ -2,6 +2,7 @@ package commands
 
 import (
 	"encoding/base64"
+	"os"
 
 	"github.com/februu/sharenv/internal/file"
 	"github.com/februu/sharenv/internal/models"
@@ -37,6 +38,11 @@ func RunRekeyCmd(cmd *cobra.Command, args []string) {
 			return
 		}
 		plainTexts[name] = plain
+	}
+
+	if err := os.Rename(".sharenv.key", ".sharenv.old.key"); err != nil {
+		ui.Error("Could not backup old key file: %v", err)
+		return
 	}
 
 	if err := file.GenerateKeyFile(".sharenv.key"); err != nil {
