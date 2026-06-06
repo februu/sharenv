@@ -66,5 +66,5 @@ func RunRekeyCmd(cmd *cobra.Command, args []string) {
 	}
 
 	ui.Success("All environments re-encrypted with a new key.")
-	ui.Warn("Distribute the new .sharenv.key to anyone who needs access.")
+	ui.Highlight("Remember to distribute the new .sharenv.key to anyone who needs access.")
 }

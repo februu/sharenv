@@ -6,14 +6,8 @@ import (
 	"github.com/fatih/color"
 )
 
-var (
-	dimStyle  = color.New(color.Faint)
-	boldStyle = color.New(color.Bold)
-	keyStyle  = color.New(color.FgCyan, color.Bold)
-)
-
 func Success(format string, a ...any) {
-	fmt.Printf("%s\n", fmt.Sprintf(format, a...))
+	fmt.Printf("%s\n", color.New(color.FgGreen).Sprintf(format, a...))
 }
 
 func Error(format string, a ...any) {
@@ -25,21 +19,36 @@ func Warn(format string, a ...any) {
 }
 
 func Info(format string, a ...any) {
-	fmt.Printf("%s\n", fmt.Sprintf(format, a...))
+	fmt.Printf("%s\n", color.New(color.FgCyan).Sprintf(format, a...))
 }
 
-func Header(text string) {
-	fmt.Println()
-	fmt.Println(text)
+func Dim(format string, a ...any) {
+	fmt.Printf("%s\n", color.New(color.Faint).Sprintf(format, a...))
 }
 
-func ListItem(name string) {
-	fmt.Printf("- %s\n", boldStyle.Sprint(name))
+func Highlight(format string, a ...any) {
+	fmt.Printf("%s\n", color.New(color.BgHiRed, color.FgWhite).Sprintf(format, a...))
 }
 
-func KeyDisplay(label, value string) {
+func ListItems(strings []string) {
+
+	if len(strings) == 0 {
+		Dim("None")
+		return
+	}
+
+	for i, s := range strings {
+		if i > 0 {
+			fmt.Print(", ")
+		}
+		fmt.Print(s)
+	}
 	fmt.Println()
-	fmt.Printf("  %s\n", dimStyle.Sprint(label))
-	fmt.Printf("  %s\n", keyStyle.Sprint(value))
-	fmt.Println()
+}
+
+func Prompt(format string, a ...any) string {
+	fmt.Printf("%s", color.New(color.FgBlue).Sprintf(format, a...))
+	var input string
+	fmt.Scanln(&input)
+	return input
 }

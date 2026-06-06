@@ -14,6 +14,7 @@ func RunShareCmd(cmd *cobra.Command, args []string) {
 		return
 	}
 
-	ui.KeyDisplay("Secret key (.sharenv.key):", string(key))
+	ui.Dim("Secret key (.sharenv.key):")
+	ui.Success("%s", string(key))
 	ui.Warn("Keep this key secure — anyone with it can decrypt your environments.")
 }

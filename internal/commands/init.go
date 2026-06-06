@@ -15,6 +15,6 @@ func RunInitCmd(cmd *cobra.Command, args []string) {
 		ui.Error("Could not generate key file: %v", err)
 		return
 	}
-	ui.Success("Sharenv initialized — .sharenv and .sharenv.key created.")
-	ui.Warn("Add .sharenv.key to .gitignore to avoid leaking your secret key.")
+	ui.Success("Sharenv initialized.")
+	ui.Highlight("REMEMBER! Add *.key to .gitignore to avoid leaking the secret keys.")
 }
