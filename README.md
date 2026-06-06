@@ -86,6 +86,12 @@ sharenv save staging
 sharenv save local
 ```
 
+Use `-f` / `--file` to encrypt a file other than `.env`:
+
+```sh
+sharenv save production --file .env.production
+```
+
 ---
 
 ### `sharenv use <name>`
@@ -94,6 +100,12 @@ Decrypts the named environment from `.sharenv` and writes it to `.env` in the cu
 
 ```sh
 sharenv use production
+```
+
+Use `-f` / `--file` to write to a file other than `.env`:
+
+```sh
+sharenv use production --file .env.production
 ```
 
 If decryption fails, the key you have does not match the one used to encrypt that environment.
