@@ -24,9 +24,10 @@ func RunSaveCmd(cmd *cobra.Command, args []string) {
 		return
 	}
 
-	env, err := os.ReadFile(".env")
+	envFile, _ := cmd.Flags().GetString("file")
+	env, err := os.ReadFile(envFile)
 	if err != nil {
-		ui.Error("Could not read .env file: %v", err)
+		ui.Error("Could not read '%s': %v", envFile, err)
 		return
 	}
 

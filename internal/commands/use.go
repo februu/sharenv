@@ -40,10 +40,11 @@ func RunUseCmd(cmd *cobra.Command, args []string) {
 		return
 	}
 
-	if err := os.WriteFile(".env", decrypted, 0600); err != nil {
-		ui.Error("Could not write .env file: %v", err)
+	envFile, _ := cmd.Flags().GetString("file")
+	if err := os.WriteFile(envFile, decrypted, 0600); err != nil {
+		ui.Error("Could not write '%s': %v", envFile, err)
 		return
 	}
 
-	ui.Success("Environment '%s' loaded into .env.", args[0])
+	ui.Success("Environment '%s' loaded into %s.", args[0], envFile)
 }

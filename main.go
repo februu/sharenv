@@ -68,6 +68,9 @@ var rekeyCmd = &cobra.Command{
 }
 
 func main() {
+	saveCmd.Flags().StringP("file", "f", ".env", "Path to the env file to encrypt")
+	useCmd.Flags().StringP("file", "f", ".env", "Path to write the decrypted env file")
+
 	rootCmd.AddCommand(initCmd)
 	rootCmd.AddCommand(saveCmd)
 	rootCmd.AddCommand(removeCmd)
