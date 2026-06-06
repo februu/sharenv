@@ -11,7 +11,7 @@ import (
 var rootCmd = &cobra.Command{
 	Use:   "sharenv",
 	Short: "A minimal .env file manager built for sharing environment variables across users and machines.",
-	Long:  `Sharenv is a minimal .env file manager built for sharing environment variables across users and machines. It provides a simple CLI interface to manage and share environment variables, making it easier to maintain consistent configurations across different environments.`,
+	Long:  `Sharenv is a minimal .env file manager built for sharing environment variables across users and machines using keys.`,
 	Run:   commands.RunRootCmd,
 }
 
@@ -22,20 +22,23 @@ var initCmd = &cobra.Command{
 }
 
 var saveCmd = &cobra.Command{
-	Use:   "save",
+	Use:   "save <name>",
 	Short: "Track current .env file",
+	Args:  cobra.ExactArgs(1),
 	Run:   commands.RunSaveCmd,
 }
 
 var removeCmd = &cobra.Command{
-	Use:   "remove",
+	Use:   "remove <name>",
 	Short: "Remove specified environment file from tracking",
+	Args:  cobra.ExactArgs(1),
 	Run:   commands.RunRemoveCmd,
 }
 
 var useCmd = &cobra.Command{
-	Use:   "use",
+	Use:   "use <name>",
 	Short: "Use an environment file that is being tracked",
+	Args:  cobra.ExactArgs(1),
 	Run:   commands.RunUseCmd,
 }
 
