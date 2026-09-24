@@ -8,7 +8,7 @@ _Sharenv is a minimal CLI tool for managing and sharing `.env` files across user
 
 </div>
 
-Sharenv solves the problem of safely sharing environment variables across a team. Instead of sending secrets over Slack or storing them in plaintext, sharenv encrypts your `.env` files and stores them in a `.sharenv` lock file that is safe to commit to version control. Team members can decrypt the environments using a shared key.
+Sharenv solves the problem of safely sharing environment files across a small team/your personal machines and keeping them in sync. Instead of sending secrets over Slack or storing them in plaintext every time you update them, sharenv encrypts your `.env` files and stores them in a `.sharenv` lock file that is safe to commit to version control. Team members can decrypt the environment files using a shared encryption key.
 
 **How it works:**
 
@@ -17,7 +17,7 @@ Sharenv solves the problem of safely sharing environment variables across a team
 3. Share the key with teammates via `sharenv share`, or send them the `.sharenv.key` file directly.
 4. Teammates place the key file in the project root and restore any environment with `sharenv use <name>`.
 
-The `.sharenv` lock file holds encrypted ciphertext and is safe to commit. The `.sharenv.key` file holds the secret and **must never be committed** — add it to `.gitignore`.
+The `.sharenv` lock file holds encrypted environments and is safe to commit. The `.sharenv.key` file holds the secret key and **must never be committed** — add it to `.gitignore`.
 
 ## Installation
 
@@ -39,24 +39,21 @@ go build -o sharenv .
 # 1. Initialize sharenv in your project
 sharenv init
 
-# 2. Add all key files to .gitignore immediately
-echo "*.key" >> .gitignore
+# 2. Save your current .env as a named environment
+sharenv save dev
 
 # 3. Commit the lock file
 git add .sharenv
-git commit -m "chore: add sharenv lock file"
+git commit -m "chore: add sharenv lock file with 'dev' environment"
 
-# 4. Save your current .env as a named environment
-sharenv save production
-
-# 5. Share the key with a teammate
+# 4. Share the key with a teammate once
 sharenv share
 ```
 
 On a teammate's machine:
 ```sh
-# Place the key they received into the project root as .sharenv.key, then:
-sharenv use production
+# Clone the repo, place the received key into the project root inside `.sharenv.key`, then:
+sharenv use dev
 ```
 
 ## Commands
